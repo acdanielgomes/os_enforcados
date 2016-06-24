@@ -11,6 +11,7 @@ public class Game {
     private String[] letters;
     private String[] invisibleLetters;
     private ArrayList<String> failedLetters;
+
     private int randomIndex;
 
     private FileManager fileManager;
@@ -21,30 +22,13 @@ public class Game {
     }
 
 
-    public void init() {
-
-
-
-
-
-
-
-
-
-        System.out.println(toString(invisibleLetters));
-
-    }
-
-
     public void start() {
-
         word = getRandomWord();
         letters = convertWordToLetters(word);
         invisibleLetters = hideLetters(letters);
 
         System.out.println(word);
-        /*System.out.println(word);
-        System.out.println(toString(invisibleLetters));*/
+
     }
 
     public int randomIndex(){
@@ -82,12 +66,30 @@ public class Game {
         return line;
     }
 
-    public void confirm(String msg) {
+    public boolean confirmLetters(String msg){
+
         for (int i = 0; i < letters.length ; i++) {
+
             if (msg.equals(letters[i])) {
                 invisibleLetters[i] = letters[i];
             }
         }
+
+        if (toString(letters).contains(msg)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean confirmWord(String msg){
+
+        if (msg.equals(word)) {
+            invisibleLetters = letters;
+            return true;
+        }
+
+        return false;
     }
 
     /* GETTERS AND SETTERS */

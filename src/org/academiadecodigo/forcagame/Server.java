@@ -25,6 +25,7 @@ public class Server {
     private Socket clientSocket = null;
     private int n = 0;
     private BufferedReader input;
+    private boolean isGameEnd;
 
     private List<ServerThread> clientList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
@@ -66,10 +67,6 @@ public class Server {
             System.out.println("Waiting for clients to connect...");
 
 
-
-
-
-
             //server.sendall(o jogo vai começar, o 1ro e ana)
             //WHILE
             //send8 ana TOKEN
@@ -101,6 +98,9 @@ public class Server {
 
 
             game.start();
+
+
+
             sendToAll(game.toString(game.getInvisibleLetters()));
 
         } catch (IOException e) {
@@ -121,9 +121,22 @@ public class Server {
     public void sendToAll(String msg){
         synchronized (clientList) {
             System.out.println("Sending to clients");
+
             for (ServerThread client: clientList) {
-                game.confirm(msg);
-                client.write(/*msg + "\n" + */game.toString(game.getInvisibleLetters()));
+
+                if (msg.length() == 1) {
+
+                    game.confirmLetters(msg);
+                    isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
+
+                    client.write(game.toString(game.getInvisibleLetters()));
+
+                } else {
+
+                    isGameEnd = game.confirmWord(msg);
+
+                    client.write(game.toString(game.getInvisibleLetters()));
+                }
             }
         }
     }

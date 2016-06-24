@@ -11,10 +11,9 @@ import java.net.Socket;
 public class PlayerThread implements Runnable{
 
     private Socket socket = null;
-
     private BufferedReader input = null;
-
     private String playerName;
+
 
     public PlayerThread(Socket socket) {
         this.socket = socket;

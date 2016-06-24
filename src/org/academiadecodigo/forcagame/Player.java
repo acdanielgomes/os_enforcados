@@ -13,6 +13,7 @@ public class Player {
 
     private String hostName;
     private int portNumber;
+    private String name;
 
     private Socket clientSocket = null;
     private PrintWriter out = null;
@@ -45,6 +46,10 @@ public class Player {
 
             String inputRead = "";
 
+            System.out.println("Introduce your name please: \n");
+
+            name = inKeyboard.readLine() + ": ";
+
             while(true){
 
                 try {
@@ -69,7 +74,7 @@ public class Player {
             thread.join();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The game has already started with the max players! Try again in the next round!");
 
         } catch (InterruptedException e) {
             e.printStackTrace();
