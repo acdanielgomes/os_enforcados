@@ -78,24 +78,35 @@ public class Server {
                     input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 }*/
 
-
+             /* Verify the size of the List and if is less to maxNumberPlayers, it's add to the List */
             while (clientList.size() < maxNumberPlayers) {
 
                 clientSocket = serverSocket.accept();
-                System.out.println("client acepted");
+                System.out.println("Player accepted");
 
 
                 /* Create Threads and put them in the pool */
-                ServerThread serverThread = new ServerThread(clientSocket,this);
+                ServerThread serverThread = new ServerThread(clientSocket, this);
+                clientList.add(serverThread);
                 Thread clientThread = new Thread(serverThread);
                 pool.submit(clientThread);
 
-                /* Verify the size of the List and if is less to maxNumberPlayers, it's add to the List */
+                //if(serverThread.getName() != null) {
 
-                clientList.add(serverThread);
-                System.out.println("Clients online: " + clientList.size());
+                // TODO: 24/06/16 substituir o thread.sleep por algo melhor
+
+                    Thread.sleep(3000);
+
+                    System.out.println(serverThread.getName());
+
+                    System.out.println(serverThread.getName() + " connected - listening...");
+
+
+                    System.out.println("Players online: " + clientList.size());
+                //}
             }
 
+            Thread.sleep(5000);
 
             game.start();
 
@@ -106,6 +117,8 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
 
             try {

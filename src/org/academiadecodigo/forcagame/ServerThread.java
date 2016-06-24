@@ -17,6 +17,8 @@ public class ServerThread implements Runnable{
     private BufferedReader input = null;
     private PrintWriter output = null;
 
+    private String name;
+
     public ServerThread(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -41,6 +43,9 @@ public class ServerThread implements Runnable{
             output = new PrintWriter(socket.getOutputStream(), true);
             //server.sendToAll("Number of players? [0-5]");
 
+
+            name = input.readLine();
+
             while(true) {
 
                 String msg = input.readLine();
@@ -48,6 +53,8 @@ public class ServerThread implements Runnable{
                 if (msg != null) {
 
                     if (msg.equals("exit")) {
+                        System.out.println("Received from " + name + ": " + msg);
+
 
                         server.getClientList().remove(this);
                         System.out.println("List size: " + server.getClientList().size());
@@ -73,8 +80,17 @@ public class ServerThread implements Runnable{
     }
 
 
+    //Getters && setters
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  /*  public String[] convertWordToLetters(String word) {
+    public String getName() {
+        return name;
+    }
+
+
+    /*  public String[] convertWordToLetters(String word) {
 
         String[] chars = word.split("");
 
