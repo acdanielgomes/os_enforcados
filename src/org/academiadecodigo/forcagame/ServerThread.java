@@ -39,7 +39,7 @@ public class ServerThread implements Runnable{
 
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket.getOutputStream(), true);
-            server.sendToAll("Number of players? [0-5]");
+            //server.sendToAll("Number of players? [0-5]");
 
             while(true) {
 

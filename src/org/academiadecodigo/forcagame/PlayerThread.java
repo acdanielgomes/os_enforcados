@@ -14,6 +14,8 @@ public class PlayerThread implements Runnable{
 
     private BufferedReader input = null;
 
+    private String playerName;
+
     public PlayerThread(Socket socket) {
         this.socket = socket;
     }

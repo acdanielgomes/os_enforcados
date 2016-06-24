@@ -20,15 +20,31 @@ public class Game {
         fileManager.readFile();
     }
 
+
+    public void init() {
+
+
+
+
+
+
+
+
+
+        System.out.println(toString(invisibleLetters));
+
+    }
+
+
     public void start() {
 
         word = getRandomWord();
         letters = convertWordToLetters(word);
         invisibleLetters = hideLetters(letters);
 
-
         System.out.println(word);
-        System.out.println(toString(invisibleLetters));
+        /*System.out.println(word);
+        System.out.println(toString(invisibleLetters));*/
     }
 
     public int randomIndex(){

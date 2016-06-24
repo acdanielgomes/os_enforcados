@@ -45,38 +45,47 @@ public class Server {
             serverSocket = new ServerSocket(PORT_NUMBER);
 
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
+
             input = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Insert the number of players between 1 and 5!");
+
             while (n == 0) {
-            n = Integer.parseInt(input.readLine());
+                n = Integer.parseInt(input.readLine());
+
+                if (n <= maxNumberPlayers) {
+                    setMaxNumberPlayers(n);
+                    System.out.println(maxNumberPlayers);
+
+                } else {
+                    System.out.println("The nº of players can't be " + n + " please insert the number of players between 1 and 5!");
+                    n = 0;
+                }
             }
+
+
             System.out.println("Waiting for clients to connect...");
 
-            game.start();
 
-            while (true) {
 
-                System.out.println("Clients online: " + clientList.size());
+
+
+
+            //server.sendall(o jogo vai começar, o 1ro e ana)
+            //WHILE
+            //send8 ana TOKEN
+            //OUVIR A RESPOSTA
+            //SEND TO ALL RESPONSE.
+            //
+            // TODO: 22/06/16 put all this shit to a method
+            /* while (true) {
+                    input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                }*/
+
+
+            while (clientList.size() < maxNumberPlayers) {
 
                 clientSocket = serverSocket.accept();
-
-                if (clientList.isEmpty()){
-
-                // TODO: 22/06/16 put all this shit to a method
-
-                    input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-
-
-                    if (n < maxNumberPlayers) {
-
-                        setMaxNumberPlayers(n);
-                        System.out.println(maxNumberPlayers);
-
-                    } else {
-                        System.out.println("You have reached the max number of players");
-                    }
-                }
+                System.out.println("client acepted");
 
 
                 /* Create Threads and put them in the pool */
@@ -84,18 +93,15 @@ public class Server {
                 Thread clientThread = new Thread(serverThread);
                 pool.submit(clientThread);
 
-
                 /* Verify the size of the List and if is less to maxNumberPlayers, it's add to the List */
-                if (clientList.size() < maxNumberPlayers){
-                    clientList.add(serverThread);
-                }
 
-                if (clientList.size() > maxNumberPlayers){
-                    System.out.println("Chat is too busy. Try again later!");
-                    clientThread.interrupt();
-                }
-
+                clientList.add(serverThread);
+                System.out.println("Clients online: " + clientList.size());
             }
+
+
+            game.start();
+            sendToAll(game.toString(game.getInvisibleLetters()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,7 +123,7 @@ public class Server {
             System.out.println("Sending to clients");
             for (ServerThread client: clientList) {
                 game.confirm(msg);
-                client.write(/*msg + "\n" +*/ game.toString(game.getInvisibleLetters()));
+                client.write(/*msg + "\n" + */game.toString(game.getInvisibleLetters()));
             }
         }
     }
