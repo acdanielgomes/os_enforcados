@@ -18,6 +18,7 @@ public class ServerThread implements Runnable{
     private PrintWriter output = null;
 
     private String name;
+    private int life;
 
     public ServerThread(Socket socket, Server server) {
         this.socket = socket;
@@ -44,7 +45,13 @@ public class ServerThread implements Runnable{
             //server.sendToAll("Number of players? [0-5]");
 
 
-            name = input.readLine();
+            while (name == null){
+                name = input.readLine();
+            }
+
+            System.out.println(name + " connected - listening...");
+            System.out.println("Players online: " + server.getClientList().size());
+
 
             while(true) {
 

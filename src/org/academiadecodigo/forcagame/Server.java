@@ -27,6 +27,9 @@ public class Server {
     private BufferedReader input;
     private boolean isGameEnd;
 
+    private ServerThread serverThread;
+    private Thread clientThread;
+
     private List<ServerThread> clientList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
     public Server(){
@@ -86,33 +89,29 @@ public class Server {
 
 
                 /* Create Threads and put them in the pool */
-                ServerThread serverThread = new ServerThread(clientSocket, this);
+                serverThread = new ServerThread(clientSocket, this);
                 clientList.add(serverThread);
-                Thread clientThread = new Thread(serverThread);
+                clientThread = new Thread(serverThread);
                 pool.submit(clientThread);
-
-                //if(serverThread.getName() != null) {
-
-                // TODO: 24/06/16 substituir o thread.sleep por algo melhor
-
-                    Thread.sleep(3000);
-
-                    System.out.println(serverThread.getName());
-
-                    System.out.println(serverThread.getName() + " connected - listening...");
-
-
-                    System.out.println("Players online: " + clientList.size());
-                //}
             }
+
+
 
             Thread.sleep(5000);
 
             game.start();
 
 
+           /* while (!isGameEnd){
+
+
+
+            }*/
+
+
 
             sendToAll(game.toString(game.getInvisibleLetters()));
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,6 +134,11 @@ public class Server {
         synchronized (clientList) {
             System.out.println("Sending to clients");
 
+            /*game.confirmLetters(msg);
+            isGameEnd = game.confirmWord(msg);*/
+
+
+
             for (ServerThread client: clientList) {
 
                 if (msg.length() == 1) {
@@ -142,13 +146,12 @@ public class Server {
                     game.confirmLetters(msg);
                     isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
 
-                    client.write(game.toString(game.getInvisibleLetters()));
+                    client.write(game.toString(game.getInvisibleLetters()) + "\n" + game.getFailedLetters());
 
                 } else {
 
                     isGameEnd = game.confirmWord(msg);
-
-                    client.write(game.toString(game.getInvisibleLetters()));
+                    client.write(game.toString(game.getInvisibleLetters()) + "\n" + game.getFailedLetters());
                 }
             }
         }

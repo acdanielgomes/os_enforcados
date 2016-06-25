@@ -10,8 +10,8 @@ public class Game {
     private String word;
     private String[] letters;
     private String[] invisibleLetters;
-    private ArrayList<String> failedLetters;
-
+    //private ArrayList<String> failedLetters;
+    private String failedLetters = "";
     private int randomIndex;
 
     private FileManager fileManager;
@@ -66,6 +66,8 @@ public class Game {
         return line;
     }
 
+
+
     public boolean confirmLetters(String msg){
 
         for (int i = 0; i < letters.length ; i++) {
@@ -78,9 +80,11 @@ public class Game {
         if (toString(letters).contains(msg)){
             return true;
         }
-
+        failedLetters += msg + " ";
         return false;
     }
+
+
 
     public boolean confirmWord(String msg){
 
@@ -88,9 +92,10 @@ public class Game {
             invisibleLetters = letters;
             return true;
         }
-
         return false;
     }
+
+
 
     /* GETTERS AND SETTERS */
     public String[] getLetters() {
@@ -101,7 +106,8 @@ public class Game {
         return invisibleLetters;
     }
 
-    public ArrayList<String> getFailedLetters() {
+
+    public String getFailedLetters() {
         return failedLetters;
     }
 
