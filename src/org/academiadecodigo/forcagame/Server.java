@@ -19,22 +19,26 @@ public class Server {
     private final int PORT_NUMBER = 8000;
     private int maxNumberPlayers = 5;
 
-    private Game game;
-
     private ServerSocket serverSocket = null;
     private Socket clientSocket = null;
-    private int n = 0;
-    private BufferedReader input;
-    private boolean isGameEnd;
-
     private ServerThread serverThread;
     private Thread clientThread;
+    private BufferedReader input;
 
     private List<ServerThread> clientList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
+
+    private int numberPlayers = 0;
+
+    private Game game;
+    private boolean isGameEnd;
+
+
+
 
     public Server(){
         game = new Game();
     }
+
 
     /**
      * When the server started create the serverSocket with a port number.
@@ -54,19 +58,19 @@ public class Server {
 
             System.out.println("Insert the number of players between 1 and 5!");
 
-            while (n == 0) {
-                n = Integer.parseInt(input.readLine());
 
-                if (n <= maxNumberPlayers) {
-                    setMaxNumberPlayers(n);
+            while (numberPlayers == 0) {
+                numberPlayers = Integer.parseInt(input.readLine());
+
+                if (numberPlayers <= maxNumberPlayers) {
+                    setMaxNumberPlayers(numberPlayers);
                     System.out.println(maxNumberPlayers);
 
                 } else {
-                    System.out.println("The nº of players can't be " + n + " please insert the number of players between 1 and 5!");
-                    n = 0;
+                    System.out.println("The nº of players can't be " + numberPlayers + " please insert the number of players between 1 and 5!");
+                    numberPlayers = 0;
                 }
             }
-
 
             System.out.println("Waiting for clients to connect...");
 
@@ -99,12 +103,11 @@ public class Server {
 
 
             Thread.sleep(5000);
-
             game.start();
 
-            //curretn playre  = 0
-            int countIndex = 0;
-            ServerThread currentPlayer = clientList.get(countIndex);
+
+            int indexCurrentPlayer = 0;
+            ServerThread currentPlayer = clientList.get(indexCurrentPlayer);
 
 
 
@@ -112,19 +115,30 @@ public class Server {
 
                 //enviar token para current
                 //currentPlayer.write("TOKEN");
+                // enviar !token para os outros
+                sendToken(indexCurrentPlayer, currentPlayer);
+                System.out.println("aqui");
 
-                sendToken(countIndex, currentPlayer);
+
                 sendToAll(game.toString(game.getInvisibleLetters()));
 
-                // enviar !token para os outros
+
 
                 //wait clientList[currnetplayter]
+                synchronized (currentPlayer) {
+                    currentPlayer.wait();
 
+                }
                 //verificar se acertou
 
                 //increment current player se nao acertou
+                if (indexCurrentPlayer <= clientList.size()) {
+                    indexCurrentPlayer++;
+                } else {
+                    indexCurrentPlayer = 0;
+                }
 
-                countIndex++;
+                currentPlayer = clientList.get(indexCurrentPlayer);
             }
 
 
@@ -145,22 +159,18 @@ public class Server {
     }
 
 
-    public void sendToken(int index, ServerThread currentPlayer){
-
+    public void sendToken(int indexCurrentPlayer, ServerThread currentPlayer){
 
             for (int i = 0; i < clientList.size(); i++) {
 
-                if (i != index) {
-
-
-                    clientList.get(i).write(currentPlayer.getName() + " turn!");
+                if (i != indexCurrentPlayer) {
+                    clientList.get(i).write("It's " + currentPlayer.getName() + " turn!");
                     //System.out.println(clientList.get(i).getName());
+
                 } else {
                     //System.out.println("token");
                     currentPlayer.write("TOKEN");
                 }
-
-
         }
     }
 
@@ -173,26 +183,26 @@ public class Server {
             /*game.confirmLetters(msg);
             isGameEnd = game.confirmWord(msg);*/
 
-            if (msg.length() == 1) {
+
+           if (msg.length() == 1) {
 
                 game.confirmLetters(msg);
                 isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
 
             } else {
-
                 isGameEnd = game.confirmWord(msg);
             }
 
             for (ServerThread client: clientList) {
 
                 client.write(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
-
             }
         }
     }
 
-    /* GETTERS AND SETTERS */
 
+
+    //Getters && setters
     public void setMaxNumberPlayers(int maxNumberPlayers) {
         this.maxNumberPlayers = maxNumberPlayers;
     }
@@ -201,10 +211,12 @@ public class Server {
         return clientList;
     }
 
+
+
+
     public static void main(String[] args) {
 
         Server server = new Server();
         server.start();
-
     }
 }

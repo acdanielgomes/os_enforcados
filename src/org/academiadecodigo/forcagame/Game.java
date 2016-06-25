@@ -10,16 +10,17 @@ public class Game {
     private String word;
     private String[] letters;
     private String[] invisibleLetters;
-    //private ArrayList<String> failedLetters;
     private String failedLetters = "";
+    private FileManager fileManager;
     private int randomIndex;
 
-    private FileManager fileManager;
+
 
     public Game() {
         fileManager = new FileManager("resources/Words.txt");
         fileManager.readFile();
     }
+
 
 
     public void start() {
@@ -28,8 +29,9 @@ public class Game {
         invisibleLetters = hideLetters(letters);
 
         System.out.println(word);
-
     }
+
+
 
     public int randomIndex(){
         return randomIndex = (int)(Math.random() * fileManager.getWords().size());
@@ -46,6 +48,8 @@ public class Game {
         return letters;
     }
 
+
+
     public String[] hideLetters(String[] letters) {
 
         String[] hideLetters = new String[letters.length];
@@ -55,6 +59,8 @@ public class Game {
         }
         return hideLetters;
     }
+
+
 
     public String toString(String[] hideLetters) {
 
@@ -97,7 +103,9 @@ public class Game {
 
 
 
-    /* GETTERS AND SETTERS */
+
+
+   // Getters && setters
     public String[] getLetters() {
         return letters;
     }

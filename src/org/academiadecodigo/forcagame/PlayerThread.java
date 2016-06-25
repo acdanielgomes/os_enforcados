@@ -29,12 +29,12 @@ public class PlayerThread implements Runnable{
             while(text != null) {
 
                 if (text.equals("TOKEN")){
-                    System.out.println(text);
+                    System.out.println("It's your turn");
 
-                    text = input.readLine();
+//                    text = input.readLine();
                 } else {
                     System.out.println(text);
-                    break;
+//                    break;
                 }
 
                 System.out.println(text);
