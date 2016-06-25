@@ -12,8 +12,6 @@ public class PlayerThread implements Runnable{
 
     private Socket socket = null;
     private BufferedReader input = null;
-    private String playerName;
-
 
     public PlayerThread(Socket socket) {
         this.socket = socket;
@@ -29,6 +27,15 @@ public class PlayerThread implements Runnable{
             String text = input.readLine();
 
             while(text != null) {
+
+                if (text.equals("TOKEN")){
+                    System.out.println(text);
+
+                    text = input.readLine();
+                } else {
+                    System.out.println(text);
+                    break;
+                }
 
                 System.out.println(text);
 

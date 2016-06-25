@@ -13,7 +13,6 @@ public class Player {
 
     private String hostName;
     private int portNumber;
-    //private String name;
 
     private Socket clientSocket = null;
     private PrintWriter out = null;
@@ -46,9 +45,7 @@ public class Player {
 
             String inputRead = "";
 
-            System.out.println("Introduce your name please: \n");
-
-            //name = inKeyboard.readLine();
+            System.out.println("Introduce your name please: ");
 
             while(true){
 

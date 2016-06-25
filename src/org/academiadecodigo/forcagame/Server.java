@@ -51,6 +51,7 @@ public class Server {
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
 
             input = new BufferedReader(new InputStreamReader(System.in));
+
             System.out.println("Insert the number of players between 1 and 5!");
 
             while (n == 0) {
@@ -101,16 +102,30 @@ public class Server {
 
             game.start();
 
-
-           /* while (!isGameEnd){
-
-
-
-            }*/
+            //curretn playre  = 0
+            int countIndex = 0;
+            ServerThread currentPlayer = clientList.get(countIndex);
 
 
 
-            sendToAll(game.toString(game.getInvisibleLetters()));
+            while (!isGameEnd){
+
+                //enviar token para current
+                //currentPlayer.write("TOKEN");
+
+                sendToken(countIndex, currentPlayer);
+                sendToAll(game.toString(game.getInvisibleLetters()));
+
+                // enviar !token para os outros
+
+                //wait clientList[currnetplayter]
+
+                //verificar se acertou
+
+                //increment current player se nao acertou
+
+                countIndex++;
+            }
 
 
         } catch (IOException e) {
@@ -129,6 +144,27 @@ public class Server {
         }
     }
 
+
+    public void sendToken(int index, ServerThread currentPlayer){
+
+
+            for (int i = 0; i < clientList.size(); i++) {
+
+                if (i != index) {
+
+
+                    clientList.get(i).write(currentPlayer.getName() + " turn!");
+                    //System.out.println(clientList.get(i).getName());
+                } else {
+                    //System.out.println("token");
+                    currentPlayer.write("TOKEN");
+                }
+
+
+        }
+    }
+
+
     /* Method that is responsible to send the message to all clients connected */
     public void sendToAll(String msg){
         synchronized (clientList) {
@@ -137,22 +173,20 @@ public class Server {
             /*game.confirmLetters(msg);
             isGameEnd = game.confirmWord(msg);*/
 
+            if (msg.length() == 1) {
 
+                game.confirmLetters(msg);
+                isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
+
+            } else {
+
+                isGameEnd = game.confirmWord(msg);
+            }
 
             for (ServerThread client: clientList) {
 
-                if (msg.length() == 1) {
+                client.write(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
 
-                    game.confirmLetters(msg);
-                    isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
-
-                    client.write(game.toString(game.getInvisibleLetters()) + "\n" + game.getFailedLetters());
-
-                } else {
-
-                    isGameEnd = game.confirmWord(msg);
-                    client.write(game.toString(game.getInvisibleLetters()) + "\n" + game.getFailedLetters());
-                }
             }
         }
     }

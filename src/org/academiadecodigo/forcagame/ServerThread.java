@@ -69,6 +69,8 @@ public class ServerThread implements Runnable{
                         break;
                     }
 
+                    notifyAll();
+
                     server.sendToAll(msg);
                 }
             }
