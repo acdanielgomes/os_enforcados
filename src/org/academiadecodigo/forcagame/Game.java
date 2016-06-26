@@ -15,10 +15,9 @@ public class Game {
 
 
     public Game() {
-        fileManager = new FileManager("/Users/codecadet/os_enforcados/resources/words.txt");
+        fileManager = new FileManager("resources/mostCommonlyUsedNounsEnglish.txt");
         fileManager.readFile();
     }
-
 
 
     public void start() {
@@ -99,6 +98,11 @@ public class Game {
         return false;
     }
 
+
+    public String greeting(String filepath){
+
+        return fileManager.greeting(filepath);
+    }
 
 
 

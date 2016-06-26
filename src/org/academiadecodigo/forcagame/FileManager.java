@@ -16,12 +16,13 @@ public class FileManager {
     private FileReader fileReader;
     private BufferedReader bReader;
     private ArrayList<String> words = new ArrayList<>();
+    private String lines= "";
 
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
-    public void readFile(){
+    public String readFile(){
 
         try {
 
@@ -55,49 +56,37 @@ public class FileManager {
                 e.printStackTrace();
             }
         }
+        return null;
     }
 
-    /* GETTERS AND SETTERS */
+    public String greeting(String filePath){
+
+        try {
+            String line = "";
+
+            fileReader = new FileReader(filePath);
+            bReader = new BufferedReader(fileReader);
+
+            line = bReader.readLine();
+
+            while (line != null) {
+
+                lines+= line + "\n";
+                line = bReader.readLine();
+            }
+            return lines;
+
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    //Getters && setters
     public ArrayList<String> getWords() {
         return words;
     }
-
-    /*public int randomIndex(){
-        return randomIndex = (int)(Math.random() * words.size());
-    }
-
-    public String getRandomWord(){
-        return words.get(randomIndex());
-    }*/
-
-    /*public char[] convertWordToLetters(String word) {
-
-        char[] chars = word.toCharArray();
-        System.out.println(chars);
-        return chars;
-    }
-
-    public String[] hideLetters(char[] chars) {
-
-        String[] hideLetters = new String[chars.length];
-
-        for (int i = 0; i < hideLetters.length; i++) {
-            hideLetters[i] = "__";
-        }
-
-        System.out.println(toString(hideLetters));
-
-        return hideLetters;
-    }
-
-    public String toString(String[] hideLetters) {
-
-        String line = "";
-
-        for (int i = 0; i < hideLetters.length; i++) {
-            line += hideLetters[i] + " ";
-        }
-        return line;
-    }*/
-
 }

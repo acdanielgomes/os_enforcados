@@ -20,6 +20,7 @@ public class ServerThread implements Runnable{
     private String name;
     private int life;
 
+
     public ServerThread(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
@@ -46,7 +47,6 @@ public class ServerThread implements Runnable{
 
             while (name == null){
                 name = input.readLine();
-                write("ola");
             }
 
             System.out.println(name + " connected - listening...");

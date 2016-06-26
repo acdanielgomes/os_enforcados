@@ -25,6 +25,7 @@ public class Server {
     private Thread playerThread;
     private BufferedReader input;
 
+
     private List<ServerThread> playerList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
     private int numberPlayers = 0;
@@ -48,16 +49,16 @@ public class Server {
      * Server is always waiting for new connections..
      * When a new connection is accept a thread is created in the pool.
      */
+
     public void start() {
 
         try {
-
+            //sendToAll(greet);
             serverSocket = new ServerSocket(PORT_NUMBER);
 
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
 
             input = new BufferedReader(new InputStreamReader(System.in));
-
             System.out.println("Insert the number of players between 1 and 5!");
 
 
@@ -102,34 +103,31 @@ public class Server {
                 playerThread = new Thread(serverThread);
                 pool.submit(playerThread);
 
+                serverThread.write(game.greeting("resources/HangmanGreetings.txt"));
+
+
+                Thread.sleep(5000);
+
                 serverThread.write("Introduce your name please: ");
             }
 
 
-            Thread.sleep(5000);
+
+            Thread.sleep(10000);
+
             game.start();
+
+
 
             int indexCurrentPlayer = 0;
             currentPlayer = playerList.get(indexCurrentPlayer);
 
             while (!isGameEnd){
 
-                /*enviar token para current
-                currentPlayer.write("TOKEN");
-                enviar !token para os outros
-                wait playerList[currnetplayter]
-                verificar se acertou
-                increment current player se nao acertou*/
-
                 sendLettersStatus();
 
                 sendToken(indexCurrentPlayer, currentPlayer);
 
-//                sendToAll(game.toString(game.getInvisibleLetters()));
-
-                /*synchronized (playerList.get(indexCurrentPlayer)) {
-                    playerList.get(indexCurrentPlayer).wait();
-                }*/
 
                 Thread.sleep(5000);
 
@@ -140,7 +138,7 @@ public class Server {
                 }
 
 
-                if (indexCurrentPlayer < playerList.size() - 1) { // estava a dar index out of bounds por isso tem que ser playerList.size() - 1
+                if (indexCurrentPlayer < playerList.size() - 1) {
                     indexCurrentPlayer++;
                 } else {
                     indexCurrentPlayer = 0;
@@ -191,10 +189,6 @@ public class Server {
     }
 
 
-    public void sendLogo() {
-
-
-    }
 
     public void sendLettersStatus() {
         sendToAll(game.toString(game.getInvisibleLetters()) + "\n\n" + "failed letters: " + game.getFailedLetters() + "\n");
@@ -238,8 +232,9 @@ public class Server {
         return playerList;
     }
 
-
-
+    public Game getGame() {
+        return game;
+    }
 
     public static void main(String[] args) {
 
