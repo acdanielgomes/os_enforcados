@@ -22,7 +22,7 @@ public class PlayerThread implements Runnable{
 
         try {
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do serverThread
 
             String text = input.readLine();
 
@@ -36,8 +36,7 @@ public class PlayerThread implements Runnable{
                     System.out.println(text);
 //                    break;
                 }
-
-                System.out.println(text);
+//                System.out.println(text); PROVOCAVA O A DUPLICAÇÃO DO IVISIBLE LETTERS E FAILED LETTERS
 
                 text = input.readLine();
             }

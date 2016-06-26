@@ -17,7 +17,7 @@ public class Game {
 
 
     public Game() {
-        fileManager = new FileManager("resources/Words.txt");
+        fileManager = new FileManager("C:\\Users\\Ana Sofia\\Desktop\\Academia código\\Bootcamp\\Nova pasta\\os_enforcados\\resources\\Words.txt");
         fileManager.readFile();
     }
 

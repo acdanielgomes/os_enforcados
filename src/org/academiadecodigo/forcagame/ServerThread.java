@@ -40,8 +40,8 @@ public class ServerThread implements Runnable{
 
         try {
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do player
+            output = new PrintWriter(socket.getOutputStream(), true); // envia para a playerThread
             //server.sendToAll("Number of players? [0-5]");
 
 
@@ -97,37 +97,4 @@ public class ServerThread implements Runnable{
     public String getName() {
         return name;
     }
-
-
-    /*  public String[] convertWordToLetters(String word) {
-
-        String[] chars = word.split("");
-
-        //char[] chars = word.toCharArray();
-        //System.out.println(chars);
-        return chars;
-    }
-
-    public String[] hideLetters(String[] chars) {
-
-        String[] hideLetters = new String[chars.length];
-
-        for (int i = 0; i < hideLetters.length; i++) {
-            hideLetters[i] = "__";
-        }
-
-        //System.out.println(toString(hideLetters));
-
-        return hideLetters;
-    }
-
-    public String toString(String[] hideLetters) {
-
-        String line = "";
-
-        for (int i = 0; i < hideLetters.length; i++) {
-            line += hideLetters[i] + " ";
-        }
-        return line;
-    }*/
 }

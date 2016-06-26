@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
-    private final int PORT_NUMBER = 8000;
+    private final int PORT_NUMBER = 8080;
     private int maxNumberPlayers = 5;
 
     private ServerSocket serverSocket = null;
@@ -120,9 +120,9 @@ public class Server {
                 System.out.println("aqui");
 
 
-                sendToAll(game.toString(game.getInvisibleLetters()));
+               // sendToAll(game.toString(game.getInvisibleLetters()));
 
-
+                sendLettersStatus();
 
                 //wait clientList[currnetplayter]
                 synchronized (currentPlayer) {
@@ -164,7 +164,7 @@ public class Server {
             for (int i = 0; i < clientList.size(); i++) {
 
                 if (i != indexCurrentPlayer) {
-                    clientList.get(i).write("It's " + currentPlayer.getName() + " turn!");
+                    clientList.get(i).write("It's " + currentPlayer.getName() + "'s turn!");
                     //System.out.println(clientList.get(i).getName());
 
                 } else {
@@ -177,28 +177,37 @@ public class Server {
 
     /* Method that is responsible to send the message to all clients connected */
     public void sendToAll(String msg){
-        synchronized (clientList) {
+        //synchronized (clientList) {
             System.out.println("Sending to clients");
+
+        for (ServerThread client: clientList) {
+            client.write(msg);
+        }
+
 
             /*game.confirmLetters(msg);
             isGameEnd = game.confirmWord(msg);*/
 
 
-           if (msg.length() == 1) {
+         /*  if (msg.length() == 1) {
 
                 game.confirmLetters(msg);
                 isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
 
             } else {
                 isGameEnd = game.confirmWord(msg);
-            }
+            }*/
 
-            for (ServerThread client: clientList) {
 
+         /*   for (ServerThread client: clientList) {
                 client.write(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
-            }
-        }
+            }*/
     }
+
+    public void sendLettersStatus () {
+        sendToAll(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
+    }
+
 
 
 
