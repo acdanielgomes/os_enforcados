@@ -20,17 +20,19 @@ public class Server {
     private int maxNumberPlayers = 5;
 
     private ServerSocket serverSocket = null;
-    private Socket clientSocket = null;
+    private Socket playerSocket = null;
     private ServerThread serverThread;
-    private Thread clientThread;
+    private Thread playerThread;
     private BufferedReader input;
 
-    private List<ServerThread> clientList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
+    private List<ServerThread> playerList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
     private int numberPlayers = 0;
 
     private Game game;
     private boolean isGameEnd;
+
+    private ServerThread currentPlayer;
 
 
 
@@ -64,7 +66,7 @@ public class Server {
 
                 if (numberPlayers <= maxNumberPlayers) {
                     setMaxNumberPlayers(numberPlayers);
-                    System.out.println(maxNumberPlayers);
+                    //System.out.println(maxNumberPlayers);
 
                 } else {
                     System.out.println("The nº of players can't be " + numberPlayers + " please insert the number of players between 1 and 5!");
@@ -72,7 +74,7 @@ public class Server {
                 }
             }
 
-            System.out.println("Waiting for clients to connect...");
+            System.out.println("Waiting for players to connect...");
 
 
             //server.sendall(o jogo vai começar, o 1ro e ana)
@@ -82,23 +84,25 @@ public class Server {
             //SEND TO ALL RESPONSE.
             // TODO: 22/06/16 put all this shit to a method
             /* while (true) {
-                    input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    input = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
                 }*/
 
 
 
              /* Verify the size of the List and if is less to maxNumberPlayers, it's add to the List */
-            while (clientList.size() < maxNumberPlayers) {
+            while (playerList.size() < maxNumberPlayers) {
 
-                clientSocket = serverSocket.accept();
+                playerSocket = serverSocket.accept();
                 System.out.println("Player accepted");
 
 
                 /* Create Threads and put them in the pool */
-                serverThread = new ServerThread(clientSocket, this);
-                clientList.add(serverThread);
-                clientThread = new Thread(serverThread);
-                pool.submit(clientThread);
+                serverThread = new ServerThread(playerSocket, this);
+                playerList.add(serverThread);
+                playerThread = new Thread(serverThread);
+                pool.submit(playerThread);
+
+                serverThread.write("Introduce your name please: ");
             }
 
 
@@ -106,14 +110,14 @@ public class Server {
             game.start();
 
             int indexCurrentPlayer = 0;
-            ServerThread currentPlayer = clientList.get(indexCurrentPlayer);
+            currentPlayer = playerList.get(indexCurrentPlayer);
 
             while (!isGameEnd){
 
                 /*enviar token para current
                 currentPlayer.write("TOKEN");
                 enviar !token para os outros
-                wait clientList[currnetplayter]
+                wait playerList[currnetplayter]
                 verificar se acertou
                 increment current player se nao acertou*/
 
@@ -123,24 +127,25 @@ public class Server {
 
 //                sendToAll(game.toString(game.getInvisibleLetters()));
 
-                /*synchronized (clientList.get(indexCurrentPlayer)) {
-                    clientList.get(indexCurrentPlayer).wait();
+                /*synchronized (playerList.get(indexCurrentPlayer)) {
+                    playerList.get(indexCurrentPlayer).wait();
                 }*/
 
-                Thread.sleep(20000);
+                Thread.sleep(5000);
 
                 if (isGameEnd) {
                     System.out.println("The game is over");
+                    sendLettersStatus();
                     break;
                 }
 
 
-                if (indexCurrentPlayer < clientList.size() - 1) { // estava a dar index out of bounds por isso tem que ser clientList.size() - 1
+                if (indexCurrentPlayer < playerList.size() - 1) { // estava a dar index out of bounds por isso tem que ser playerList.size() - 1
                     indexCurrentPlayer++;
                 } else {
                     indexCurrentPlayer = 0;
                 }
-                currentPlayer = clientList.get(indexCurrentPlayer);
+                currentPlayer = playerList.get(indexCurrentPlayer);
             }
 
 
@@ -163,12 +168,12 @@ public class Server {
 
     public void sendToken(int indexCurrentPlayer, ServerThread currentPlayer){
 
-        for (int i = 0; i < clientList.size(); i++) {
+        for (int i = 0; i < playerList.size(); i++) {
 
             if (i != indexCurrentPlayer) {
-                clientList.get(i).write("It's " + currentPlayer.getName() + "'s turn!");
+                playerList.get(i).write("It's " + currentPlayer.getName() + "'s turn!");
             } else {
-                currentPlayer.write("TOKEN");
+                currentPlayer.write("TOKEN - It's your turn!");
             }
         }
     }
@@ -176,42 +181,51 @@ public class Server {
 
     /* Method that is responsible to send the message to all clients connected */
     public void sendToAll(String msg){
-        //synchronized (clientList) {
+        synchronized (playerList) {
             System.out.println("Sending to clients");
 
-        for (ServerThread client: clientList) {
-            client.write(msg);
+            for (ServerThread client : playerList) {
+                client.write(msg);
+            }
         }
+    }
 
-            /*game.confirmLetter(msg);
-            isGameEnd = game.confirmWord(msg);*/
 
-         /*  if (msg.length() == 1) {
+    public void sendLogo() {
 
-                game.confirmLetter(msg);
-                isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
-            } else {
-                isGameEnd = game.confirmWord(msg);
-            }*/
 
-         /*   for (ServerThread client: clientList) {
-                client.write(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
-            }*/
     }
 
     public void sendLettersStatus() {
-        sendToAll(game.toString(game.getInvisibleLetters()) + "\n" + "failed letters: " + game.getFailedLetters());
+        sendToAll(game.toString(game.getInvisibleLetters()) + "\n\n" + "failed letters: " + game.getFailedLetters() + "\n");
     }
 
 
     public void checkPlayerChoice(String msg) {
 
         if (msg.length() == 1) {
+
             game.confirmLetter(msg);
             isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
-        } else {
-            isGameEnd = game.confirmWord(msg);
+
+            /*if (game.confirmLetter(msg) == false) {
+                serverThread.setLife();
+                if (serverThread.getLife() == 0) {
+                    playerList.remove(currentPlayer);
+                    System.out.println(playerList.size());
+                }
+            }*/
         }
+        isGameEnd = game.confirmWord(msg);
+
+        /*else {
+            isGameEnd = game.confirmWord(msg);
+
+            if (game.confirmWord(msg) == false) {
+                playerList.remove(currentPlayer);
+                System.out.println(playerList.size());
+            }
+        }*/
     }
 
 
@@ -220,8 +234,8 @@ public class Server {
         this.maxNumberPlayers = maxNumberPlayers;
     }
 
-    public List<ServerThread> getClientList() {
-        return clientList;
+    public List<ServerThread> getPlayerList() {
+        return playerList;
     }
 
 

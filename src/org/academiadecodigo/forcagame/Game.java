@@ -1,7 +1,5 @@
 package org.academiadecodigo.forcagame;
 
-import java.util.ArrayList;
-
 /**
  * Created by codecadet on 20/06/16.
  */
@@ -17,7 +15,7 @@ public class Game {
 
 
     public Game() {
-        fileManager = new FileManager("C:\\Users\\Ana Sofia\\Desktop\\Academia código\\Bootcamp\\Nova pasta\\os_enforcados\\resources\\Words.txt");
+        fileManager = new FileManager("/Users/codecadet/os_enforcados/resources/words.txt");
         fileManager.readFile();
     }
 
@@ -83,7 +81,7 @@ public class Game {
             }
         }
 
-        if (toString(letters).contains(msg)){
+        if (toString(letters).contains(msg)) {
             return true;
         }
         failedLetters += msg + " ";

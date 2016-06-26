@@ -46,10 +46,11 @@ public class ServerThread implements Runnable{
 
             while (name == null){
                 name = input.readLine();
+                write("ola");
             }
 
             System.out.println(name + " connected - listening...");
-            System.out.println("Players online: " + server.getClientList().size());
+            System.out.println("Players online: " + server.getPlayerList().size());
 
 
             while(true) {
@@ -61,9 +62,8 @@ public class ServerThread implements Runnable{
                     if (msg.equals("exit")) {
                         System.out.println("Received from " + name + ": " + msg);
 
-
-                        server.getClientList().remove(this);
-                        System.out.println("List size: " + server.getClientList().size());
+                        server.getPlayerList().remove(this);
+                        System.out.println("List size: " + server.getPlayerList().size());
                         socket.close();
                         break;
                     }
@@ -95,5 +95,13 @@ public class ServerThread implements Runnable{
 
     public String getName() {
         return name;
+    }
+
+    public void setLife() {
+        life--;
+    }
+
+    public int getLife() {
+        return life;
     }
 }

@@ -45,7 +45,7 @@ public class Player {
 
             String inputRead = "";
 
-            System.out.println("Introduce your name please: ");
+            //System.out.println("Introduce your name please: ");
 
             while(true){
 
