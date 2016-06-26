@@ -29,6 +29,10 @@ public class Player {
         this.portNumber = portNumber;
     }
 
+    /**
+     * creates a socket for the client with a host and a port number
+     * creates a new thread for the respective player (client)
+     */
     public void start() {
 
         try {
@@ -44,8 +48,6 @@ public class Player {
             thread.start();
 
             String inputRead = "";
-
-            //System.out.println("Introduce your name please: ");
 
             while(true){
 

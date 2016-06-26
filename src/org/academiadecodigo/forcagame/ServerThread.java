@@ -20,12 +20,15 @@ public class ServerThread implements Runnable{
     private String name;
     private int life;
 
-
     public ServerThread(Socket socket, Server server) {
         this.socket = socket;
         this.server = server;
     }
 
+    /**
+     * it writes and forces the output
+     * @param msg - player's (clients) input
+     */
     public void write(String msg){
         try {
             Thread.sleep(500);
@@ -36,6 +39,10 @@ public class ServerThread implements Runnable{
         output.flush();
     }
 
+    /**
+     * it waits the player (client) input
+     * it sends the input to all the players
+     */
     @Override
     public void run() {
 
@@ -44,14 +51,12 @@ public class ServerThread implements Runnable{
             input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do player
             output = new PrintWriter(socket.getOutputStream(), true); // envia para a playerThread
 
-
             while (name == null){
                 name = input.readLine();
             }
 
             System.out.println(name + " connected - listening...");
             System.out.println("Players online: " + server.getPlayerList().size());
-
 
             while(true) {
 
@@ -67,8 +72,6 @@ public class ServerThread implements Runnable{
                         socket.close();
                         break;
                     }
-
-                    //server.sendToAll(msg);
 
                     server.checkPlayerChoice(msg);
                 }
@@ -86,7 +89,6 @@ public class ServerThread implements Runnable{
             }
         }
     }
-
 
     //Getters && setters
     public void setName(String name) {

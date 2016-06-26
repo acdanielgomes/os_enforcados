@@ -17,6 +17,9 @@ public class PlayerThread implements Runnable{
         this.socket = socket;
     }
 
+    /**
+     * receives a "message" from the server and prints that "message" to all the players (clients)
+     */
     @Override
     public void run() {
 
@@ -29,14 +32,10 @@ public class PlayerThread implements Runnable{
             while(text != null) {
 
                 if (text.equals("TOKEN - It's your turn!")){
-                    //System.out.println("It's your turn");
 
-//                    text = input.readLine();
                 } else {
                     System.out.println(text);
-//                    break;
                 }
-//                System.out.println(text); PROVOCAVA O A DUPLICAÇÃO DO IVISIBLE LETTERS E FAILED LETTERS
 
                 text = input.readLine();
             }

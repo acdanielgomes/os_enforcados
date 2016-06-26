@@ -18,14 +18,12 @@ public class Server {
 
     private final int PORT_NUMBER = 8080;
     private int maxNumberPlayers = 5;
-    private final int MINNUMBERPLAYERS = 1;
 
     private ServerSocket serverSocket = null;
     private Socket playerSocket = null;
     private ServerThread serverThread;
     private Thread playerThread;
     private BufferedReader input;
-
 
     private List<ServerThread> playerList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
@@ -36,13 +34,9 @@ public class Server {
 
     private ServerThread currentPlayer;
 
-
-
-
     public Server(){
         game = new Game();
     }
-
 
     /**
      * When the server started create the serverSocket with a port number.
@@ -50,7 +44,6 @@ public class Server {
      * Server is always waiting for new connections..
      * When a new connection is accept a thread is created in the pool.
      */
-
     public void start() {
 
         try {
@@ -64,7 +57,7 @@ public class Server {
             while (numberPlayers == 0) {
                 numberPlayers = Integer.parseInt(input.readLine());
 
-                if (numberPlayers <= maxNumberPlayers && numberPlayers >= MINNUMBERPLAYERS) {
+                if (numberPlayers <= maxNumberPlayers && numberPlayers >= 1) {
                     setMaxNumberPlayers(numberPlayers);
 
                 } else {
@@ -73,12 +66,6 @@ public class Server {
                 }
             }
             System.out.println("Waiting for players to connect...");
-
-            /* while (true) {
-                    input = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
-                }*/
-
-
 
              /* Verify the size of the List and if is less to maxNumberPlayers, it's add to the List */
             while (playerList.size() < maxNumberPlayers) {
@@ -107,8 +94,6 @@ public class Server {
 
             game.start();
 
-
-
             int indexCurrentPlayer = 0;
             currentPlayer = playerList.get(indexCurrentPlayer);
 
@@ -117,7 +102,6 @@ public class Server {
                 sendLettersStatus();
 
                 sendToken(indexCurrentPlayer, currentPlayer);
-
 
                 Thread.sleep(5000);
 
@@ -132,7 +116,6 @@ public class Server {
 
                     break;
                 }
-
 
                 if (indexCurrentPlayer < playerList.size() - 1) {
                     indexCurrentPlayer++;
@@ -159,7 +142,11 @@ public class Server {
         }
     }
 
-
+    /**
+     * sends a token for the current player and sends a message to the rest of the players (clients)
+     * @param indexCurrentPlayer - current player position from the array list
+     * @param currentPlayer - player actually playing
+     */
     public void sendToken(int indexCurrentPlayer, ServerThread currentPlayer){
 
         for (int i = 0; i < playerList.size(); i++) {
@@ -172,8 +159,9 @@ public class Server {
         }
     }
 
-
-    /* Method that is responsible to send the message to all clients connected */
+    /**
+     *  Method that is responsible to send the message to all clients connected
+     **/
     public void sendToAll(String msg){
         synchronized (playerList) {
             System.out.println("Sending to clients");
@@ -184,13 +172,17 @@ public class Server {
         }
     }
 
-
-
+    /**
+     * sends the array of array with underscores and letters and it shows the failed letters
+     */
     public void sendLettersStatus() {
         sendToAll(game.toString(game.getInvisibleLetters()) + "\n\n" + "failed letters: " + game.getFailedLetters() + "\n");
     }
 
-
+    /**
+     * it'll check if the player choice has one or more than one character and it calls the respective method
+     * @param msg - player's input
+     */
     public void checkPlayerChoice(String msg) {
 
         if (msg.length() == 1) {
@@ -198,26 +190,10 @@ public class Server {
             game.confirmLetter(msg);
             isGameEnd = game.confirmWord(game.toString(game.getInvisibleLetters()).replaceAll("\\s",""));
 
-            /*if (game.confirmLetter(msg) == false) {
-                serverThread.setLife();
-                if (serverThread.getLife() == 0) {
-                    playerList.remove(currentPlayer);
-                    System.out.println(playerList.size());
-                }
-            }*/
         }
         isGameEnd = game.confirmWord(msg);
 
-        /*else {
-            isGameEnd = game.confirmWord(msg);
-
-            if (game.confirmWord(msg) == false) {
-                playerList.remove(currentPlayer);
-                System.out.println(playerList.size());
-            }
-        }*/
     }
-
 
     //Getters && setters
     public void setMaxNumberPlayers(int maxNumberPlayers) {

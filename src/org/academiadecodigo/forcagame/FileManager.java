@@ -16,12 +16,17 @@ public class FileManager {
     private FileReader fileReader;
     private BufferedReader bReader;
     private ArrayList<String> words = new ArrayList<>();
-//    private String lines = "";
 
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * reads the file saved from a provided file path
+     * if there's a file available, it'll read us every line from it and it'll save on a variable
+     * if there's no file, it'll send us an error message
+     * each word found on the file, it'll be saved on array list of strings
+     */
     public String readFile(){
 
         try {
@@ -123,7 +128,6 @@ public class FileManager {
         }
         return lines;
     }
-
 
     //Getters && setters
     public ArrayList<String> getWords() {
