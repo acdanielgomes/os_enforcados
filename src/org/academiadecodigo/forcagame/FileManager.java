@@ -16,7 +16,7 @@ public class FileManager {
     private FileReader fileReader;
     private BufferedReader bReader;
     private ArrayList<String> words = new ArrayList<>();
-    private String lines= "";
+//    private String lines = "";
 
     public FileManager(String filePath) {
         this.filePath = filePath;
@@ -60,28 +60,68 @@ public class FileManager {
     }
 
     public String greeting(String filePath){
+        String lines = "";
 
         try {
-            String line = "";
 
             fileReader = new FileReader(filePath);
             bReader = new BufferedReader(fileReader);
 
-            line = bReader.readLine();
+            String line = bReader.readLine();
 
             while (line != null) {
 
-                lines+= line + "\n";
+                lines += line + "\n";
                 line = bReader.readLine();
             }
-            return lines;
-
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+
+                if (fileReader != null) fileReader.close();
+                if (bReader != null) bReader.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return lines;
+    }
+
+    public String victory(String filePath){
+        String lines = "";
+        try {
+
+            fileReader = new FileReader(filePath);
+            bReader = new BufferedReader(fileReader);
+
+            String line1 = bReader.readLine();
+
+            while (line1 != null) {
+
+                lines += line1 + "\n";
+                line1 = bReader.readLine();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+
+                if (fileReader != null) fileReader.close();
+                if (bReader != null) bReader.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return lines;
     }
 
 

@@ -68,7 +68,7 @@ public class ServerThread implements Runnable{
                         break;
                     }
 
-                    server.sendToAll(msg);
+                    //server.sendToAll(msg);
 
                     server.checkPlayerChoice(msg);
                 }

@@ -18,6 +18,7 @@ public class Server {
 
     private final int PORT_NUMBER = 8080;
     private int maxNumberPlayers = 5;
+    private final int MINNUMBERPLAYERS = 1;
 
     private ServerSocket serverSocket = null;
     private Socket playerSocket = null;
@@ -53,7 +54,6 @@ public class Server {
     public void start() {
 
         try {
-            //sendToAll(greet);
             serverSocket = new ServerSocket(PORT_NUMBER);
 
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
@@ -61,29 +61,19 @@ public class Server {
             input = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Insert the number of players between 1 and 5!");
 
-
             while (numberPlayers == 0) {
                 numberPlayers = Integer.parseInt(input.readLine());
 
-                if (numberPlayers <= maxNumberPlayers) {
+                if (numberPlayers <= maxNumberPlayers && numberPlayers >= MINNUMBERPLAYERS) {
                     setMaxNumberPlayers(numberPlayers);
-                    //System.out.println(maxNumberPlayers);
 
                 } else {
-                    System.out.println("The nº of players can't be " + numberPlayers + " please insert the number of players between 1 and 5!");
+                    System.out.println("The nº of players can't be " + numberPlayers + ". Please insert the number of players between 1 and 5!");
                     numberPlayers = 0;
                 }
             }
-
             System.out.println("Waiting for players to connect...");
 
-
-            //server.sendall(o jogo vai começar, o 1ro e ana)
-            //WHILE
-            //send8 ana TOKEN
-            //OUVIR A RESPOSTA
-            //SEND TO ALL RESPONSE.
-            // TODO: 22/06/16 put all this shit to a method
             /* while (true) {
                     input = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
                 }*/
@@ -96,24 +86,24 @@ public class Server {
                 playerSocket = serverSocket.accept();
                 System.out.println("Player accepted");
 
-
                 /* Create Threads and put them in the pool */
                 serverThread = new ServerThread(playerSocket, this);
+
                 playerList.add(serverThread);
+
                 playerThread = new Thread(serverThread);
+
                 pool.submit(playerThread);
 
-                serverThread.write(game.greeting("resources/HangmanGreetings.txt"));
-
-
-                Thread.sleep(5000);
 
                 serverThread.write("Introduce your name please: ");
+
             }
+            Thread.sleep(2000);
+            sendToAll(game.greeting("resources/HangmanGreetings.txt"));
+            //serverThread.write(game.greeting("resources/HangmanGreetings.txt"));
 
-
-
-            Thread.sleep(10000);
+            Thread.sleep(3000);
 
             game.start();
 
@@ -134,6 +124,12 @@ public class Server {
                 if (isGameEnd) {
                     System.out.println("The game is over");
                     sendLettersStatus();
+                    sendToAll(currentPlayer.getName() + " won!");
+                    currentPlayer.write(game.victory("resources/victory.txt"));
+
+                    Thread.sleep(5000);
+                    serverSocket.close();
+
                     break;
                 }
 

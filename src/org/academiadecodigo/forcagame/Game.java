@@ -100,10 +100,12 @@ public class Game {
 
 
     public String greeting(String filepath){
-
         return fileManager.greeting(filepath);
     }
 
+    public String victory(String filepath){
+        return fileManager.victory(filepath);
+    }
 
 
 
