@@ -74,7 +74,7 @@ public class Game {
 
 
 
-    public boolean confirmLetters(String msg){
+    public boolean confirmLetter(String msg){
 
         for (int i = 0; i < letters.length ; i++) {
 

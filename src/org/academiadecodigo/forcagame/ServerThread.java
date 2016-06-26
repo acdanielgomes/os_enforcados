@@ -42,7 +42,6 @@ public class ServerThread implements Runnable{
 
             input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do player
             output = new PrintWriter(socket.getOutputStream(), true); // envia para a playerThread
-            //server.sendToAll("Number of players? [0-5]");
 
 
             while (name == null){
@@ -69,9 +68,9 @@ public class ServerThread implements Runnable{
                         break;
                     }
 
-                    notifyAll();
-
                     server.sendToAll(msg);
+
+                    server.checkPlayerChoice(msg);
                 }
             }
 
