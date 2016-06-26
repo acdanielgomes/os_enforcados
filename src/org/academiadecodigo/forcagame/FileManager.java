@@ -16,12 +16,13 @@ public class FileManager {
     private FileReader fileReader;
     private BufferedReader breader;
     private ArrayList<String> words = new ArrayList<>();
+    private String lines= "";
 
     public FileManager(String filePath) {
         this.filePath = filePath;
     }
 
-    public void readFile(){
+    public String readFile(){
 
         try {
 
@@ -55,6 +56,35 @@ public class FileManager {
                 e.printStackTrace();
             }
         }
+        return null;
+    }
+
+    public String greeting(String filePath){
+
+
+        try {
+            String line = "";
+
+            fileReader = new FileReader(filePath);
+            breader = new BufferedReader(fileReader);
+
+            line = breader.readLine();
+
+            while (line != null) {
+
+                lines+= line + "\n";
+                line = breader.readLine();
+            }
+
+            return lines;
+
+
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /* GETTERS AND SETTERS */

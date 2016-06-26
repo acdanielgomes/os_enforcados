@@ -1,0 +1,24 @@
+*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*
+* A BA$Htards Creation©, 2016.//////////////////////////////////////////////////////////////////////////*
+* Credits: Ana$, Daniel$, Diogo$, Flavio$, Samuel$//////////////////////////////////////////////////////*
+* Special Thanks to: #FUNdão <ACADEMIA DE CÓDIGO_> crew and Little Coin folks///////////////////////////*
+*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*
+                                                                                                                                   Overview:
+
+    ======================                                                                           +-+                In this game you have to guess the word
+     #     ##      ()                                                                               +|B|+               by picking letters one by one or guessing
+     #    #G       ()                                                                               +|A|+               the word straight away.The same word will
+     #   ##        ()                                                                               +|$|+               be given to each player which will try to
+     #  #L         ()                                                                               +|H|+               guess in his turn.The first to guess or
+     # ##        _ '' _                                                                             +|t|+               the last standing WINS.
+     ##G        | |  | |                                                                            +|a|+
+     ##         | |__| | __ _ _ __   __ _ _ __ ___   __ _ _ __                                      +|r|+
+     #          |  __  |/ _` | '_ \ / _` | '_ ` _ \ / _` | '_ \                                     +|d|+                        Instructions:
+     #          | |  | | (_| | | | | (_| | | | | | | (_| | | | |                                    +|s|+
+     #          |_|  |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|                                     +-+                > Use your keyboard and type your guess;
+     #                               __/ |                                                           |1|                > GAME OVER, if you miss a letter 5 times;
+     #                              |___/                                                            |6|                > Be WISE, if you try to guess the word
+     #                                                                                              +---+                 straight away, you either get an instant
+    =============================================                                                                         WIN or instant LOOSE!
+
+*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*

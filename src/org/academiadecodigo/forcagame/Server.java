@@ -25,6 +25,8 @@ public class Server {
     private Thread clientThread;
     private BufferedReader input;
 
+
+
     private List<ServerThread> clientList = Collections.synchronizedList(new ArrayList<>(maxNumberPlayers));
 
     private int numberPlayers = 0;
@@ -46,16 +48,16 @@ public class Server {
      * Server is always waiting for new connections..
      * When a new connection is accept a thread is created in the pool.
      */
+
     public void start() {
 
         try {
-
+            //sendToAll(greet);
             serverSocket = new ServerSocket(PORT_NUMBER);
 
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
 
             input = new BufferedReader(new InputStreamReader(System.in));
-
             System.out.println("Insert the number of players between 1 and 5!");
 
 
@@ -105,6 +107,7 @@ public class Server {
             Thread.sleep(5000);
             game.start();
 
+            sendToAll(game.greeting("resources/hangmanGreetings.txt"));
             int indexCurrentPlayer = 0;
             ServerThread currentPlayer = clientList.get(indexCurrentPlayer);
 

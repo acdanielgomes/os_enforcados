@@ -17,7 +17,7 @@ public class Game {
 
 
     public Game() {
-        fileManager = new FileManager("C:\\Users\\Ana Sofia\\Desktop\\Academia código\\Bootcamp\\Nova pasta\\os_enforcados\\resources\\Words.txt");
+        fileManager = new FileManager("resources/mostCommonlyUsedNounsEnglish.txt");
         fileManager.readFile();
     }
 
@@ -101,6 +101,11 @@ public class Game {
         return false;
     }
 
+
+    public String greeting(String filepath){
+
+        return fileManager.greeting(filepath);
+    }
 
 
 
