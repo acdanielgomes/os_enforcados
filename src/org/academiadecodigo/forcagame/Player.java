@@ -39,8 +39,8 @@ public class Player {
 
             clientSocket = new Socket(hostName, portNumber);
 
-            out = new PrintWriter(clientSocket.getOutputStream(), true); // socket que liga o player ao server. envia para o serverthread o que  player escreveu
-            inKeyboard = new BufferedReader(new InputStreamReader(System.in)); // o que o player escreve no teclado
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            inKeyboard = new BufferedReader(new InputStreamReader(System.in));
 
             playerThread = new PlayerThread(clientSocket);
 
@@ -52,9 +52,12 @@ public class Player {
             while(true){
 
                 try {
+
                     inputRead = inKeyboard.readLine();
 
                     if (inputRead != null) {
+
+
 
                         out.write(inputRead + "\n");
                         out.flush();
@@ -67,7 +70,10 @@ public class Player {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
             }
+
+
 
             /* Wait for this thread to die */
             thread.join();
@@ -93,7 +99,7 @@ public class Player {
 
     public static void main(String[] args)  {
 
-        Player player = new Player("127.0.0.1", 8080);
+        Player player = new Player(args[0], Integer.parseInt(args[1]));
         player.start();
     }
 }

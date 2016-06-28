@@ -25,13 +25,14 @@ public class PlayerThread implements Runnable{
 
         try {
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do serverThread
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String text = input.readLine();
 
             while(text != null) {
 
-                if (text.equals("TOKEN - It's your turn!")){
+                if (text.equals("It's your turn!")){
+                    System.out.println(text);
 
                 } else {
                     System.out.println(text);

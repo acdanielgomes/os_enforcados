@@ -5,6 +5,7 @@ package org.academiadecodigo.forcagame;
  */
 public class Game {
 
+    private final String PATH_WORDSLIST = ("resources/javaKeywords.txt");
     private String word;
     private String[] letters;
     private String[] invisibleLetters;
@@ -13,7 +14,7 @@ public class Game {
     private int randomIndex;
 
     public Game() {
-        fileManager = new FileManager("resources/mostCommonlyUsedNounsEnglish.txt");
+        fileManager = new FileManager(PATH_WORDSLIST);
         fileManager.readFile();
     }
 

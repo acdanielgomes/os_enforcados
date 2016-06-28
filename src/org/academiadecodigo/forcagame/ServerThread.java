@@ -48,8 +48,8 @@ public class ServerThread implements Runnable{
 
         try {
 
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); // recebe do player
-            output = new PrintWriter(socket.getOutputStream(), true); // envia para a playerThread
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new PrintWriter(socket.getOutputStream(), true);
 
             while (name == null){
                 name = input.readLine();

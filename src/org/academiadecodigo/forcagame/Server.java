@@ -16,8 +16,11 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
-    private final int PORT_NUMBER = 8080;
+    private int portNumber;
     private int maxNumberPlayers = 5;
+
+    private final String PATH_GREETINGS = "resources/hangmanGreetings.txt";
+    private final String PATH_VICTORY = "resources/victory.txt";
 
     private ServerSocket serverSocket = null;
     private Socket playerSocket = null;
@@ -34,7 +37,8 @@ public class Server {
 
     private ServerThread currentPlayer;
 
-    public Server(){
+    public Server(int i){
+        portNumber = i;
         game = new Game();
     }
 
@@ -47,7 +51,7 @@ public class Server {
     public void start() {
 
         try {
-            serverSocket = new ServerSocket(PORT_NUMBER);
+            serverSocket = new ServerSocket(portNumber);
 
             ExecutorService pool = Executors.newFixedThreadPool(maxNumberPlayers);
 
@@ -86,11 +90,11 @@ public class Server {
                 serverThread.write("Introduce your name please: ");
 
             }
-            Thread.sleep(2000);
-            sendToAll(game.greeting("resources/HangmanGreetings.txt"));
+            Thread.sleep(5000);
+            sendToAll(game.greeting(PATH_GREETINGS));
             //serverThread.write(game.greeting("resources/HangmanGreetings.txt"));
 
-            Thread.sleep(3000);
+            Thread.sleep(30000);
 
             game.start();
 
@@ -103,13 +107,13 @@ public class Server {
 
                 sendToken(indexCurrentPlayer, currentPlayer);
 
-                Thread.sleep(5000);
+                Thread.sleep(10000);
 
                 if (isGameEnd) {
                     System.out.println("The game is over");
                     sendLettersStatus();
                     sendToAll(currentPlayer.getName() + " won!");
-                    currentPlayer.write(game.victory("resources/victory.txt"));
+                    currentPlayer.write(game.victory(PATH_VICTORY));
 
                     Thread.sleep(5000);
                     serverSocket.close();
@@ -154,7 +158,7 @@ public class Server {
             if (i != indexCurrentPlayer) {
                 playerList.get(i).write("It's " + currentPlayer.getName() + "'s turn!");
             } else {
-                currentPlayer.write("TOKEN - It's your turn!");
+                playerList.get(i).write("It's your turn!");
             }
         }
     }
@@ -210,7 +214,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        Server server = new Server();
+        Server server = new Server(Integer.parseInt(args[0]));
         server.start();
     }
 }
